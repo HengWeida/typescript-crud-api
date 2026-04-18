@@ -9,6 +9,7 @@ import { userService } from './user.service';
 const router = Router();
 
 router.get('/', getAll);
+router.post('/authenticate', authenticateSchema, authenticate);
 router.get('/:id', getById);
 router.post('/', createSchema, create);
 router.put('/:id', updateSchema, update);
@@ -70,5 +71,19 @@ function updateSchema(req: Request, res: Response, next: NextFunction): void {
         password: Joi.string().min(6).empty(''),
         confirmPassword: Joi.string().valid(Joi.ref('password')).empty(''),
     }).with('password', 'confirmPassword');
+    validateRequest(req, next, schema);
+}
+
+function authenticate(req: Request, res: Response, next: NextFunction): void {
+    userService.authenticate(req.body)
+        .then((user) => res.json(user))
+        .catch(next);
+}
+
+function authenticateSchema(req: Request, res: Response, next: NextFunction): void {
+    const schema = Joi.object({
+        email: Joi.string().required(),
+        password: Joi.string().required()
+    });
     validateRequest(req, next, schema);
 }

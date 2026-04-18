@@ -25,4 +25,26 @@ export async function initialize(): Promise<void> {
 
     console.log(' Database initialized and model synced ');
 
+    // --- SEED ADMIN ACCOUNT ---
+    const adminEmail = 'admin@example.com';
+    const adminExists = await db.User.findOne({ where: { email: adminEmail } });
+
+    if (!adminExists) {
+        console.log(' Admin account not found. Seeding now...');
+        
+        // We import service here to avoid circular dependencies
+        const { userService } = await import('../users/user.service');
+        
+        await userService.create({
+            title: 'Mr.',
+            firstName: 'System',
+            lastName: 'Admin',
+            email: adminEmail,
+            password: 'Password123!',
+            confirmPassword: 'Password123!',
+            role: 'admin' 
+        } as any);
+
+        // console.log('Admin account created: admin@example.com / Password123!');
+    }
 }
