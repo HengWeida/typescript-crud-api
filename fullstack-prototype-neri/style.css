@@ -1,0 +1,21 @@
+.page { display: none; }
+.page.active { display: block; }
+
+body.not-authenticated .role-logged-in { display: none; }
+body.authenticated .role-logged-out { display: none; }
+
+.role-admin { display: none; }
+body.is-admin .role-admin { display: block; }
+
+body.authenticated .auth-only-out {
+    display: none !important;
+}
+
+#user-display.btn-outline-secondary:hover, 
+#user-display.btn-outline-secondary:focus, 
+#user-display.btn-outline-secondary:active,
+#user-display.btn-outline-secondary.show {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
